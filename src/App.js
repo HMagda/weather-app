@@ -1,13 +1,14 @@
 import React, {useEffect, useState} from 'react';
-// import axios from 'axios';
+import axios from 'axios';
 import styles from './styles/styles.module.scss';
 
 const App = () => {
   const [capitals, setCapitals] = useState(null);
   const [selected, setSelected] = useState('');
+  const [data, setData] = useState({});
 
   useEffect(() => {
-    console.log('use eff ran');
+    console.log('use eff with fetch countries list ran');
     fetch('http://localhost:5000/countries_with_capitals')
       .then((res) => {
         return res.json();
@@ -17,10 +18,26 @@ const App = () => {
       });
   }, []);
 
-  const searchLocation = (e) => {
+  const updateState = (e) => {
+    console.log('searchLocation ran');
     setSelected(e.target.value);
-    console.log('e.target.value', e.target.value);
   };
+
+  useEffect(() => {
+    console.log('use eff with axios get api_url ran');
+
+    //here you will have correct value in selected
+    let selected_arr = [];
+    selected_arr = selected.split(',');
+    let selectedCity = selected_arr[0];
+    selectedCity = encodeURIComponent(selectedCity);
+    const api_url = `https://api.openweathermap.org/data/2.5/weather?q=${selectedCity}&appid=${process.env.REACT_APP_API_KEY}`;
+
+    axios.get(api_url).then((res) => {
+      setData(res.data);
+      console.log('res.data', res.data);
+    });
+  }, [selected]);
 
   return (
     <div className={styles.app}>
@@ -29,11 +46,7 @@ const App = () => {
 
         <div className={styles.main}>
           <div className={styles.location}>
-            <select
-              value={selected}
-              // onChange={(e) => setSelected(e.target.value)}
-              onChange={searchLocation}
-            >
+            <select value={selected} onChange={updateState}>
               <option disabled className={styles.instruction}>
                 Click to choose the capital city
               </option>
@@ -44,7 +57,6 @@ const App = () => {
                   </option>
                 ))}
             </select>
-
             <p>
               {selected ? selected : 'Click above to choose the capital city'}
             </p>
@@ -53,7 +65,7 @@ const App = () => {
             <p className={styles.value}>276.01°K</p>
           </div>
         </div>
-
+        
         <div className={styles.addition}>
           <div className={styles.container}>
             <h2>feels like</h2>
