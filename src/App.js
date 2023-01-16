@@ -61,25 +61,40 @@ const App = () => {
               {selected ? selected : 'Click above to choose the capital city'}
             </p>
           </div>
-          <div className={styles.temperature}>
-            <p className={styles.value}>276.01°K</p>
-          </div>
         </div>
-        
-        <div className={styles.addition}>
-          <div className={styles.container}>
-            <h2>feels like</h2>
-            <p className={styles.value}>271.48°K</p>
-          </div>
-          <div className={styles.container}>
-            <h2>wind speed</h2>
-            <p className={styles.value}> 5.66 m/sec</p>
-          </div>
-          <div className={styles.container}>
-            <h2>cloudiness</h2>
-            <p className={styles.value}>75%</p>
-          </div>
-        </div>
+
+        {Object.keys(data).length !== 0 && (
+          <>
+            <div className={styles.temperature}>
+              <p className={styles.value}>
+                {data.main.temp}
+                °K
+              </p>
+            </div>
+            <div className={styles.addition}>
+              <div className={styles.container}>
+                <h2>feels like</h2>
+                <p className={styles.value}>
+                  {data.main.feels_like}
+                  °K
+                </p>
+              </div>
+              <div className={styles.container}>
+                <h2>wind speed</h2>
+                <p className={styles.value}>
+                  {data.wind.speed}
+                  m/sec
+                </p>
+              </div>
+              <div className={styles.container}>
+                <h2>cloudiness</h2>
+                <p className={styles.value}>
+                  {data.clouds.all}
+                  %</p>
+              </div>
+            </div>
+          </>
+        )}
       </div>
     </div>
   );
