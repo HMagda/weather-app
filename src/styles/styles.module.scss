@@ -85,6 +85,14 @@ $font-family-secondary: 'Kanit', sans-serif;
         padding: 0.5em;
         font-size: 1em;
         border-radius: 1rem;
+
+        .scale_select {
+          font-size: 1em;
+          font-family: $font-family-secondary;
+          width: max-content;
+          padding: 0.5em;
+          border-radius: 0.5rem;
+        }
       }
     }
   }
