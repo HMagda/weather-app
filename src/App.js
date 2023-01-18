@@ -8,6 +8,7 @@ const App = () => {
   const [data, setData] = useState({});
   const [scale, setScale] = useState('K');
   const [feltTemp, setFeltTemp] = useState('');
+  const [actualTemp, setActualTemp] = useState('');
 
   useEffect(() => {
     // todo: if nothing selected then do nothing
@@ -40,26 +41,39 @@ const App = () => {
     setScale(e.target.value);
   };
 
-  function roundNumber(num) {
-    return Math.round((num + Number.EPSILON) * 100) / 100;
-  }
-
   useEffect(() => {
-    let baseFeltTemp = 0.0;
-    if (Object.keys(data).length !== 0) {
-      baseFeltTemp = data.main.feels_like;
+
+    function roundNumber(num) {
+      return Math.round((num + Number.EPSILON) * 100) / 100;
+    }
+  
+    function convertKelvinToCelsius(temp) {
+      return roundNumber(temp - 273.15);
+    }
+  
+    function convertKelvinToFahrenheit(temp) {
+      return roundNumber(1.8 * (temp - 273.15) + 32);
     }
     
+    let baseFeltTemp = 0.0;
+    let baseActualTemp = 0.0;
+
+    if (Object.keys(data).length !== 0) {
+      baseFeltTemp = data.main.feels_like;
+      baseActualTemp = data.main.temp;
+    }
+
     if (scale === 'C') {
-      let KelvinToCelsius = roundNumber(baseFeltTemp - 273.15);
-      setFeltTemp(KelvinToCelsius);
+      setFeltTemp(convertKelvinToCelsius(baseFeltTemp));
+      setActualTemp(convertKelvinToCelsius(baseActualTemp));
     } else if (scale === 'F') {
-      let KelvinToFahrenheit = roundNumber(1.8 * (baseFeltTemp - 273.15) + 32);
-      setFeltTemp(KelvinToFahrenheit);
+      setFeltTemp(convertKelvinToFahrenheit(baseFeltTemp));
+      setFeltTemp(convertKelvinToFahrenheit(baseActualTemp));
     } else {
       setFeltTemp(baseFeltTemp);
+      setActualTemp(baseActualTemp);
     }
-  });
+  }, [data, scale]);
 
   return (
     <div className={styles.app}>
@@ -89,7 +103,6 @@ const App = () => {
                     );
                   }
                 })}
-                
             </select>
             <p>
               {selected ? selected : 'Click above to choose the capital city'}
@@ -100,27 +113,44 @@ const App = () => {
         {Object.keys(data).length !== 0 && (
           <>
             <div className={styles.temperature}>
-              <p className={styles.value}>{data.main.temp}</p>
+              {actualTemp === '' ? (
+                <p className={styles.value}>{data.main.temp}</p>
+              ) : (
+                <p className={styles.value}>{actualTemp}</p>
+              )}
+
+              <select
+                value={scale}
+                onChange={handleChangeScale}
+                className={styles.scale_select}
+              >
+                <option value='K'>K</option>
+                <option value='C'>&deg;C</option>
+                <option value='F'>&deg;F</option>
+              </select>
             </div>
+
             <div className={styles.addition}>
               <div className={styles.container}>
                 <h2>feels like</h2>
 
-                {feltTemp === '' ? (
-                  <p className={styles.value}>{data.main.feels_like}</p>
-                ) : (
-                  <p className={styles.value}>{feltTemp}</p>
-                )}
+                <div className={styles.felt_temperature}>
+                  {feltTemp === '' ? (
+                    <p className={styles.value}>{data.main.feels_like}</p>
+                  ) : (
+                    <p className={styles.value}>{feltTemp}</p>
+                  )}
 
-                <select
-                  value={scale}
-                  onChange={handleChangeScale}
-                  className={styles.scale_select}
-                >
-                  <option value='K'>K</option>
-                  <option value='C'>&deg;C</option>
-                  <option value='F'>&deg;F</option>
-                </select>
+                  <select
+                    value={scale}
+                    onChange={handleChangeScale}
+                    className={styles.scale_select}
+                  >
+                    <option value='K'>K</option>
+                    <option value='C'>&deg;C</option>
+                    <option value='F'>&deg;F</option>
+                  </select>
+                </div>
               </div>
               <div className={styles.container}>
                 <h2>wind speed</h2>
