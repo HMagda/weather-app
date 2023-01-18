@@ -33,18 +33,17 @@ $font-family-secondary: 'Kanit', sans-serif;
 
 main {
   min-height: 100vh;
-
   display: flex;
   align-items: center;
   justify-content: center;
   font-family: $font-family-secondary;
-  font-weight: 300;
 
   .wrapper {
     color: black;
     background-color: rgba(255, 255, 255, 0.5);
     width: max-content;
     font-size: 1.2em;
+    margin: 1em;
     padding: 1.5em;
     border-radius: 1rem;
     box-shadow: -0.1em -0.1em 1em 0.1em rgba(0, 0, 0, 0.2);
@@ -69,28 +68,29 @@ main {
       margin-left: 0.3em;
     }
 
-    .main {
+    .location {
       text-align: center;
-      margin-bottom: 2em;
       font-size: 1.5em;
 
-      .location {
-        p {
-          font-weight: 400;
+      .select_location {
+        font-size: 0.5em;
+        font-family: $font-family-secondary;
+        width: max-content;
+        margin-bottom: 1em;
+        padding: 0.5em;
+        border-radius: 0.5rem;
+
+        .instruction {
+          color: white;
+          background-color: grey;
         }
 
-        select {
-          font-size: 0.5em;
-          font-family: $font-family-secondary;
-          width: max-content;
-          padding: 0.5em;
-          border-radius: 0.5rem;
-
-          .instruction {
-            color: white;
-            background-color: grey;
-          }
+        @include respond-small {
+          width: 80%;
         }
+      }
+      p {
+        font-weight: 500;
       }
     }
 
@@ -99,6 +99,8 @@ main {
       display: flex;
       justify-content: center;
       align-items: center;
+      text-align: center;
+      margin: 1em;
     }
 
     .addition {
@@ -124,6 +126,10 @@ main {
           justify-content: center;
           align-items: center;
         }
+
+        @include respond-small {
+          font-size: 1.2em;
+        }
       }
 
       @include respond-small {
@@ -132,7 +138,7 @@ main {
     }
 
     @include respond-small {
-      width: min-content;
+      width: 80%;
     }
   }
 }

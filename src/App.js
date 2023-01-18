@@ -33,7 +33,6 @@ const App = () => {
 
     axios.get(api_url).then((res) => {
       setData(res.data);
-      console.log(res.data);
     });
   }, [selected]);
 
@@ -90,34 +89,36 @@ const App = () => {
         <div className={styles.wrapper}>
           <h1 className={styles.page_title}>Weather in Capitals Worldwide</h1>
 
-          <div className={styles.main}>
-            <div className={styles.location}>
-              <select value={selected} onChange={updateState}>
-                <option disabled className={styles.instruction}>
-                  Click to choose the capital city
-                </option>
+          <div className={styles.location}>
+            <select
+              value={selected}
+              onChange={updateState}
+              className={styles.select_location}
+            >
+              <option disabled className={styles.instruction}>
+                Click to choose the capital city
+              </option>
 
-                {capitals &&
-                  capitals.map((elem, i) => {
-                    if (i === 0) {
-                      return (
-                        <option hidden key={i}>
-                          Click here to choose the capital city
-                        </option>
-                      );
-                    } else {
-                      return (
-                        <option key={i}>
-                          {elem.city}, {elem.country}
-                        </option>
-                      );
-                    }
-                  })}
-              </select>
-              <p>
-                {selected ? selected : 'Click above to choose the capital city'}
-              </p>
-            </div>
+              {capitals &&
+                capitals.map((elem, i) => {
+                  if (i === 0) {
+                    return (
+                      <option hidden key={i}>
+                        Click here to choose the capital city
+                      </option>
+                    );
+                  } else {
+                    return (
+                      <option key={i}>
+                        {elem.city}, {elem.country}
+                      </option>
+                    );
+                  }
+                })}
+            </select>
+            <p>
+              {selected ? selected : 'Click above to choose the capital city'}
+            </p>
           </div>
 
           {Object.keys(data).length !== 0 && (
