@@ -173,8 +173,8 @@
       "city": "Flying Fish Cove"
     },
     {
-      "country": "Cocos (Keeling) Islands",
-      "city": "West Island"
+      "country": "(Cocos) Islands, West Island",
+      "city": "Keeling"
     },
     {
       "country": "Colombia",
@@ -226,7 +226,7 @@
     },
     {
       "country": "Dominican Republic",
-      "city": "Santo Domingo de Guzm"
+      "city": "Santo Domingo"
     },
     {
       "country": "East Timor",
@@ -565,8 +565,8 @@
       "city": "Maputo"
     },
     {
-      "country": "Myanmar",
-      "city": "Rangoon (Yangon)"
+      "country": "(Rangoon) Myanmar",
+      "city": "Yangon"
     },
     {
       "country": "Namibia",
@@ -915,10 +915,6 @@
     {
       "country": "Venezuela",
       "city": "Caracas"
-    },
-    {
-      "country": "Vetican City",
-      "city": "Vetican City"
     },
     {
       "country": "Vietnam",

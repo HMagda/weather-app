@@ -11,7 +11,6 @@ const App = () => {
   const [actualTemp, setActualTemp] = useState('');
 
   useEffect(() => {
-    // todo: if nothing selected then do nothing
     fetch('http://localhost:5000/countries_with_capitals')
       .then((res) => {
         return res.json();
@@ -34,6 +33,7 @@ const App = () => {
 
     axios.get(api_url).then((res) => {
       setData(res.data);
+      console.log(res.data);
     });
   }, [selected]);
 
@@ -42,19 +42,18 @@ const App = () => {
   };
 
   useEffect(() => {
-
     function roundNumber(num) {
       return Math.round((num + Number.EPSILON) * 100) / 100;
     }
-  
+
     function convertKelvinToCelsius(temp) {
       return roundNumber(temp - 273.15);
     }
-  
+
     function convertKelvinToFahrenheit(temp) {
       return roundNumber(1.8 * (temp - 273.15) + 32);
     }
-    
+
     let baseFeltTemp = 0.0;
     let baseActualTemp = 0.0;
 
@@ -68,7 +67,7 @@ const App = () => {
       setActualTemp(convertKelvinToCelsius(baseActualTemp));
     } else if (scale === 'F') {
       setFeltTemp(convertKelvinToFahrenheit(baseFeltTemp));
-      setFeltTemp(convertKelvinToFahrenheit(baseActualTemp));
+      setActualTemp(convertKelvinToFahrenheit(baseActualTemp));
     } else {
       setFeltTemp(baseFeltTemp);
       setActualTemp(baseActualTemp);
@@ -76,97 +75,109 @@ const App = () => {
   }, [data, scale]);
 
   return (
-    <div className={styles.app}>
-      <div className={styles.wrapper}>
-        <h1 className={styles.page_title}>Weather in Capitals Worldwide</h1>
+    <div
+      className={
+        typeof data.clouds != 'undefined'
+          ? data.clouds.all < 20
+            ? styles.clear_sky
+            : data.clouds.all < 60
+            ? styles.partly_cloudy
+            : styles.app
+          : styles.app
+      }
+    >
+      <main>
+        <div className={styles.wrapper}>
+          <h1 className={styles.page_title}>Weather in Capitals Worldwide</h1>
 
-        <div className={styles.main}>
-          <div className={styles.location}>
-            <select value={selected} onChange={updateState}>
-              <option disabled className={styles.instruction}>
-                Click to choose the capital city
-              </option>
+          <div className={styles.main}>
+            <div className={styles.location}>
+              <select value={selected} onChange={updateState}>
+                <option disabled className={styles.instruction}>
+                  Click to choose the capital city
+                </option>
 
-              {capitals &&
-                capitals.map((elem, i) => {
-                  if (i === 0) {
-                    return (
-                      <option hidden key={i}>
-                        Click here to choose the capital city
-                      </option>
-                    );
-                  } else {
-                    return (
-                      <option key={i}>
-                        {elem.city}, {elem.country}
-                      </option>
-                    );
-                  }
-                })}
-            </select>
-            <p>
-              {selected ? selected : 'Click above to choose the capital city'}
-            </p>
-          </div>
-        </div>
-
-        {Object.keys(data).length !== 0 && (
-          <>
-            <div className={styles.temperature}>
-              {actualTemp === '' ? (
-                <p className={styles.value}>{data.main.temp}</p>
-              ) : (
-                <p className={styles.value}>{actualTemp}</p>
-              )}
-
-              <select
-                value={scale}
-                onChange={handleChangeScale}
-                className={styles.scale_select}
-              >
-                <option value='K'>K</option>
-                <option value='C'>&deg;C</option>
-                <option value='F'>&deg;F</option>
+                {capitals &&
+                  capitals.map((elem, i) => {
+                    if (i === 0) {
+                      return (
+                        <option hidden key={i}>
+                          Click here to choose the capital city
+                        </option>
+                      );
+                    } else {
+                      return (
+                        <option key={i}>
+                          {elem.city}, {elem.country}
+                        </option>
+                      );
+                    }
+                  })}
               </select>
+              <p>
+                {selected ? selected : 'Click above to choose the capital city'}
+              </p>
             </div>
+          </div>
 
-            <div className={styles.addition}>
-              <div className={styles.container}>
-                <h2>feels like</h2>
+          {Object.keys(data).length !== 0 && (
+            <>
+              <div className={styles.temperature}>
+                {actualTemp === '' ? (
+                  <p className={styles.value}>{data.main.temp}</p>
+                ) : (
+                  <p className={styles.value}>{actualTemp}</p>
+                )}
 
-                <div className={styles.felt_temperature}>
-                  {feltTemp === '' ? (
-                    <p className={styles.value}>{data.main.feels_like}</p>
-                  ) : (
-                    <p className={styles.value}>{feltTemp}</p>
-                  )}
+                <select
+                  value={scale}
+                  onChange={handleChangeScale}
+                  className={styles.scale_select}
+                >
+                  <option value='K'>K</option>
+                  <option value='C'>&deg;C</option>
+                  <option value='F'>&deg;F</option>
+                </select>
+              </div>
 
-                  <select
-                    value={scale}
-                    onChange={handleChangeScale}
-                    className={styles.scale_select}
-                  >
-                    <option value='K'>K</option>
-                    <option value='C'>&deg;C</option>
-                    <option value='F'>&deg;F</option>
-                  </select>
+              <div className={styles.addition}>
+                <div className={styles.container}>
+                  <h2>feels like</h2>
+
+                  <div className={styles.felt_temperature}>
+                    {feltTemp === '' ? (
+                      <p className={styles.value}>{data.main.feels_like}</p>
+                    ) : (
+                      <p className={styles.value}>{feltTemp}</p>
+                    )}
+
+                    <select
+                      value={scale}
+                      onChange={handleChangeScale}
+                      className={styles.scale_select}
+                    >
+                      <option value='K'>K</option>
+                      <option value='C'>&deg;C</option>
+                      <option value='F'>&deg;F</option>
+                    </select>
+                  </div>
+                </div>
+                <div className={styles.container}>
+                  <h2>wind speed</h2>
+                  <p className={styles.value}>
+                    {data.wind.speed}
+                    &nbsp;m/sec
+                  </p>
+                </div>
+                <div className={styles.container}>
+                  <h2>cloudiness</h2>
+                  <p className={styles.value}>{data.clouds.all}%</p>
                 </div>
               </div>
-              <div className={styles.container}>
-                <h2>wind speed</h2>
-                <p className={styles.value}>
-                  {data.wind.speed}
-                  &nbsp;m/sec
-                </p>
-              </div>
-              <div className={styles.container}>
-                <h2>cloudiness</h2>
-                <p className={styles.value}>{data.clouds.all}%</p>
-              </div>
-            </div>
-          </>
-        )}
-      </div>
+            </>
+          )}
+        </div>
+      </main>
     </div>
   );
 };
