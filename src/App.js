@@ -76,13 +76,11 @@ const App = () => {
   return (
     <div
       className={
-        typeof data.clouds != 'undefined'
-          ? data.clouds.all < 20
-            ? styles.clear_sky
-            : data.clouds.all < 60
-            ? styles.partly_cloudy
-            : styles.app
-          : styles.app
+        typeof data.clouds != 'undefined' ?
+        data.clouds.all < 20 ?
+         styles.clear_sky : data.clouds.all < 60 ? 
+          styles.partly_cloudy : styles.app
+        : styles.app
       }
     >
       <main>
