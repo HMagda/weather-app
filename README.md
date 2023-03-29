@@ -13,5 +13,6 @@ A React weather app that uses the OpenWeatherMap API to retrieve current weather
 
 - Search for weather data by city name
 - Display current weather conditions: actual and feels like temperature, cloudiness, and wind speed
+- The background image changes based on the cloudiness level
 - Support for multiple units of measurement (Kelvin, Celsius, and Fahrenheit)
 - Mobile-friendly responsive design
